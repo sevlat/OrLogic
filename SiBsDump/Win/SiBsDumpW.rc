@@ -1,0 +1,299 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,1,0,1
+ PRODUCTVERSION 0,1,0,1
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "SeVlaT"
+            VALUE "FileDescription", "SportIdend Base Station dumper"
+            VALUE "FileVersion", "0, 1, 0, 1"
+            VALUE "InternalName", "SiBsDumpW"
+            VALUE "LegalCopyright", "Copyright (C) 2013"
+            VALUE "OriginalFilename", "SiBsDumpW.exe"
+            VALUE "ProductName", "SiBsDumpW"
+            VALUE "ProductVersion", "0, 1, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_SIBSDUMPW           ICON                    "SiBsDumpW.ico"
+IDI_SMALL               ICON                    "small.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDC_SIBSDUMPW MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       IDM_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About ...",                  IDM_ABOUTBOX
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_SIBSDUMPW ACCELERATORS 
+BEGIN
+    "?",            IDM_ABOUTBOX,           ASCII,  ALT
+    "/",            IDM_ABOUTBOX,           ASCII,  ALT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 315
+        VERTGUIDE, 14
+        VERTGUIDE, 68
+        VERTGUIDE, 73
+        VERTGUIDE, 133
+        VERTGUIDE, 171
+        VERTGUIDE, 231
+        VERTGUIDE, 270
+        VERTGUIDE, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 210
+        HORZGUIDE, 20
+        HORZGUIDE, 40
+        HORZGUIDE, 54
+        HORZGUIDE, 68
+        HORZGUIDE, 82
+        HORZGUIDE, 96
+        HORZGUIDE, 110
+        HORZGUIDE, 124
+        HORZGUIDE, 142
+        HORZGUIDE, 199
+    END
+
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        VERTGUIDE, 40
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 78
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAINDLG DIALOGEX 0, 0, 322, 217
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SportIdend Base Station dumper."
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Com port:",IDC_COMPORT,7,7,113,135
+    EDITTEXT        IDC_COMPORT_NAME,14,20,54,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Connect",IDC_COMPORT_CONNECT,73,20,43,14
+    PUSHBUTTON      "Disconnect",IDC_COMPORT_DISCONNECT,73,40,43,14
+    PUSHBUTTON      "Search",IDC_COMPORT_SEARCH,14,40,44,14
+    LISTBOX         IDC_COMPORT_LIST,14,54,54,63,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_COMPORT_STATUS,14,124,102,14,ES_AUTOHSCROLL | ES_READONLY
+    GROUPBOX        "Master",IDC_MASTER,126,7,90,135
+    PUSHBUTTON      "Detect",IDC_MASTER_DETECT,133,20,34,14
+    CONTROL         "Auto",IDC_MASTER_DETECT_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,171,20,31,14
+    LTEXT           "Code",IDC_MASTER_CODE_TITLE,133,40,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_MASTER_CODE,171,40,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Mode",IDC_MASTER_MODE_TITLE,133,54,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_MASTER_MODE,171,54,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Model",IDC_MASTER_MODEL_TITLE,133,68,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_MASTER_MODEL,171,68,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "SerNum",IDC_MASTER_SERNUM_TITLE,133,82,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_MASTER_SERNUM,171,82,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Bck Ptr",IDC_MASTER_BCKPTR_TITLE,133,96,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_MASTER_BCKPTR,171,96,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Overflow",IDC_MASTER_OVERFLOW_TITLE,133,110,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_MASTER_OVERFLOW,171,110,40,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Dump",IDC_MASTER_DUMP,133,124,33,14
+    GROUPBOX        "Slave",IDC_SLAVE,225,7,90,135
+    PUSHBUTTON      "Detect",IDC_SLAVE_DETECT,231,20,34,14
+    CONTROL         "Auto",IDC_SLAVE_DETECT_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,269,20,31,14
+    LTEXT           "Code",IDC_SLAVE_CODE_TITLE,231,40,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_SLAVE_CODE,269,40,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Mode",IDC_SLAVE_MODE_TITLE,231,54,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_SLAVE_MODE,269,54,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Model",IDC_SLAVE_MODEL_TITLE,231,68,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_SLAVE_MODEL,270,68,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "SerNum",IDC_SLAVE_SERNUM_TITLE,231,82,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_SLAVE_SERNUM,269,82,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Bck Ptr",IDC_SLAVE_BCKPTR_TITLE,231,96,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_SLAVE_BCKPTR,269,96,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Overflow",IDC_SLAVE_OVERFLOW_TITLE,231,110,34,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_SLAVE_OVERFLOW,269,110,40,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Dump",IDC_SLAVE_DUMP,231,124,34,14
+    CONTROL         "Auto",IDC_SLAVE_DUMP_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,269,124,31,14
+    GROUPBOX        "Job",IDC_JOB,7,142,308,68
+    EDITTEXT        IDC_JOB_STATUS,14,155,295,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_PROGRESS,"msctls_progress32",WS_BORDER,14,174,295,14
+    PUSHBUTTON      "Stop",IDC_JOB_STOP,14,192,33,14
+    LTEXT           "Time:",IDC_STATIC,73,195,18,8
+    LTEXT           "Total",IDC_STATIC,105,195,17,8
+    RTEXT           "00:00:00",IDC_TIME_TOTAL,136,195,35,8,SS_SUNKEN
+    LTEXT           "Elapsed",IDC_STATIC,181,195,26,8
+    RTEXT           "00:00:00",IDC_TIME_ELAPSED,214,195,35,8,SS_SUNKEN
+    LTEXT           "Left",IDC_STATIC,256,195,14,8
+    RTEXT           "00:00:00",IDC_TIME_LEFT,274,195,35,8,SS_SUNKEN
+END
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 211, 85
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About SiBsDumperW"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDI_SIBSDUMPW,IDC_STATIC,14,14,20,20
+    LTEXT           "SiBsDumper (native Windows)",IDC_STATIC,40,7,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) SeVlaT, 2013",IDC_STATIC,40,54,114,8
+    DEFPUSHBUTTON   "OK",IDOK,154,64,50,14,WS_GROUP
+    LTEXT           "Version",IDC_VERSION_LABEL,40,44,164,8,SS_NOPREFIX
+    LTEXT           "SportIdent base station memory dumping utility.",IDC_STATIC,40,20,133,20,SS_NOPREFIX
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_APP_TITLE           "SiBsDumpW"
+    IDC_SIBSDUMPW           "SIBSDUMPW"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

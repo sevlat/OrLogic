@@ -1,0 +1,18 @@
+// SeVlaT, 26.12.2012
+#include "../Ext/External.h"
+
+//#include "../Ext/CmdQueue.h"
+//#include "../Ext/CmdsExchange.h"
+//#include "../Ext/CmdShpCast.h"
+//#include "../Ext/CmdShpObject.h"
+//#include "../Ext/CmdsMake.h"
+//#include "../Ext/CmdsParse.h"
+//#include "../Ext/CmdsPerform.h"
+//#include "../Ext/CmdsReceiver.h"
+#include "../Ext/CmdsSender.h"
+//#include "../Ext/CmdTransceive.h"
+//#include "../Ext/ComPortShr.h"
+//#include "../Ext/External.h"
+//#include "../Ext/SparseByteBuffer.h"
+//#include "../Ext/TimeTypes.h"
+//#include "../Ext/Types.h"

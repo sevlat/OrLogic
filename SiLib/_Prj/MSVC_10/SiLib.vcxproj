@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ECE0315C-A0A6-49B5-941C-1E3C21C38102}</ProjectGuid>
+    <RootNamespace>SiLib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\_Output\MSVC_10\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\_Output\MSVC_10\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\_Output\MSVC_10\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\_Output\MSVC_10\$(Configuration)\$(ProjectName)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Boost\1_53_0\Stage\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>../../../../lib/MSVC_10_$(Configuration)/$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>../../../../lib/MSVC_10_$(Configuration)/$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\BS.h" />
+    <ClInclude Include="..\..\BsEmulator.h" />
+    <ClInclude Include="..\..\BsMasterConnect.h" />
+    <ClInclude Include="..\..\BsMemBuf.h" />
+    <ClInclude Include="..\..\BsMemory.h" />
+    <ClInclude Include="..\..\BsTypes.h" />
+    <ClInclude Include="..\..\ByteBufAddress.h" />
+    <ClInclude Include="..\..\ByteBuffer.h" />
+    <ClInclude Include="..\..\ByteBufStream.h" />
+    <ClInclude Include="..\..\Card.h" />
+    <ClInclude Include="..\..\CardTypes.h" />
+    <ClInclude Include="..\..\Chunk.h" />
+    <ClInclude Include="..\..\CmdCast.h" />
+    <ClInclude Include="..\..\CmdData.h" />
+    <ClInclude Include="..\..\CmdDataDescribe.h" />
+    <ClInclude Include="..\..\CmdDataSerialize.h" />
+    <ClInclude Include="..\..\CmdDataSerializeImpl.h" />
+    <ClInclude Include="..\..\CmdDataSerializeSpec.h" />
+    <ClInclude Include="..\..\CmdDispatcher.h" />
+    <ClInclude Include="..\..\CmdExchange.h" />
+    <ClInclude Include="..\..\CmdItemSerialize.h" />
+    <ClInclude Include="..\..\CmdMating.h" />
+    <ClInclude Include="..\..\CmdObject.h" />
+    <ClInclude Include="..\..\CmdProcess.h" />
+    <ClInclude Include="..\..\CmdProcs.h" />
+    <ClInclude Include="..\..\CmdSerialize.h" />
+    <ClInclude Include="..\..\CmdSerializeImpl.h" />
+    <ClInclude Include="..\..\CmdTrxInfo.h" />
+    <ClInclude Include="..\..\CmdTypes.h" />
+    <ClInclude Include="..\..\CmdVisitor.h" />
+    <ClInclude Include="..\..\CmdxDispatch.h" />
+    <ClInclude Include="..\..\CmdxObserver.h" />
+    <ClInclude Include="..\..\CommandCode.h" />
+    <ClInclude Include="..\..\Commands.h" />
+    <ClInclude Include="..\..\ComPort.h" />
+    <ClInclude Include="..\..\ConfirmedValue.h" />
+    <ClInclude Include="..\..\Crc.h" />
+    <ClInclude Include="..\..\DescribeUtils.h" />
+    <ClInclude Include="..\..\Errors.h" />
+    <ClInclude Include="..\..\External.h" />
+    <ClInclude Include="..\..\Ext\CmdsExchange.h" />
+    <ClInclude Include="..\..\Ext\CmdsReceiver.h" />
+    <ClInclude Include="..\..\Ext\CmdsSender.h" />
+    <ClInclude Include="..\..\Ext\ComPortShr.h" />
+    <ClInclude Include="..\..\Ext\SparseByteBuffer.h" />
+    <ClInclude Include="..\..\Fwd.h" />
+    <ClInclude Include="..\..\I_ComPort.h" />
+    <ClInclude Include="..\..\MsgDescribe.h" />
+    <ClInclude Include="..\..\PacketParseV.h" />
+    <ClInclude Include="..\..\PacketReceiver.h" />
+    <ClInclude Include="..\..\PacketSender.h" />
+    <ClInclude Include="..\..\PortEmulator.h" />
+    <ClInclude Include="..\..\ProtChunk.h" />
+    <ClInclude Include="..\..\ProtParser.h" />
+    <ClInclude Include="..\..\ProtScanner.h" />
+    <ClInclude Include="..\..\Queue.h" />
+    <ClInclude Include="..\..\Random.h" />
+    <ClInclude Include="..\..\SerialTypes.h" />
+    <ClInclude Include="..\..\SiTypes.h" />
+    <ClInclude Include="..\..\StationTime.h" />
+    <ClInclude Include="..\..\StationTypes.h" />
+    <ClInclude Include="..\..\StationWrite.h" />
+    <ClInclude Include="..\..\Stream.h" />
+    <ClInclude Include="..\..\StreamLogger.h" />
+    <ClInclude Include="..\..\TimeTypes.h" />
+    <ClInclude Include="..\..\Types.h" />
+    <ClInclude Include="..\..\Utils.h" />
+    <ClInclude Include="..\..\Src\crc529.h" />
+    <ClInclude Include="..\..\Src\Log.h" />
+    <ClInclude Include="..\..\Src\ProtScannerEngine.h" />
+    <ClInclude Include="..\..\Src\stdafx.h" />
+    <ClInclude Include="..\..\Ext\CmdExchange.h" />
+    <ClInclude Include="..\..\Ext\CmdQueue.h" />
+    <ClInclude Include="..\..\Ext\CmdShpCast.h" />
+    <ClInclude Include="..\..\Ext\CmdShpObject.h" />
+    <ClInclude Include="..\..\Ext\CmdsMake.h" />
+    <ClInclude Include="..\..\Ext\CmdsParse.h" />
+    <ClInclude Include="..\..\Ext\CmdsPerform.h" />
+    <ClInclude Include="..\..\Ext\CmdTransceive.h" />
+    <ClInclude Include="..\..\Ext\External.h" />
+    <ClInclude Include="..\..\Ext\TimeTypes.h" />
+    <ClInclude Include="..\..\Ext\Types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Src\BS.cpp" />
+    <ClCompile Include="..\..\Src\BsEmulator.cpp" />
+    <ClCompile Include="..\..\Src\BsMasterConnect.cpp" />
+    <ClCompile Include="..\..\Src\BsMemBuf.cpp" />
+    <ClCompile Include="..\..\Src\BsMemory.cpp" />
+    <ClCompile Include="..\..\Src\BsTypes.cpp" />
+    <ClCompile Include="..\..\Src\ByteBuffer.cpp" />
+    <ClCompile Include="..\..\Src\ByteBufStream.cpp" />
+    <ClCompile Include="..\..\Src\CmdData.cpp" />
+    <ClCompile Include="..\..\Src\CmdDataDescribe.cpp" />
+    <ClCompile Include="..\..\Src\CmdExchange.cpp" />
+    <ClCompile Include="..\..\Src\CmdItemSerialize.cpp" />
+    <ClCompile Include="..\..\Src\CmdMating.cpp" />
+    <ClCompile Include="..\..\Src\CmdObject.cpp" />
+    <ClCompile Include="..\..\Src\CmdProcess.cpp" />
+    <ClCompile Include="..\..\Src\CmdQueue.cpp" />
+    <ClCompile Include="..\..\Src\CmdSerialize.cpp" />
+    <ClCompile Include="..\..\Src\CmdShpObject.cpp" />
+    <ClCompile Include="..\..\Src\CmdsReceiver.cpp" />
+    <ClCompile Include="..\..\Src\CmdsSender.cpp" />
+    <ClCompile Include="..\..\Src\CmdTransceive.cpp" />
+    <ClCompile Include="..\..\Src\CmdxDispatch.cpp" />
+    <ClCompile Include="..\..\Src\CommandCode.cpp" />
+    <ClCompile Include="..\..\Src\Commands.cpp" />
+    <ClCompile Include="..\..\Src\ComPortShr.cpp" />
+    <ClCompile Include="..\..\Src\ConfirmedValue.cpp" />
+    <ClCompile Include="..\..\Src\Crc.cpp" />
+    <ClCompile Include="..\..\Src\crc529.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\DescribeUtils.cpp" />
+    <ClCompile Include="..\..\Src\Errors.cpp" />
+    <ClCompile Include="..\..\Src\PacketParseV.cpp" />
+    <ClCompile Include="..\..\Src\PacketReceiver.cpp" />
+    <ClCompile Include="..\..\Src\PacketSender.cpp" />
+    <ClCompile Include="..\..\Src\PortEmulator.cpp" />
+    <ClCompile Include="..\..\Src\ProtChunk.cpp" />
+    <ClCompile Include="..\..\Src\ProtScanner.cpp" />
+    <ClCompile Include="..\..\Src\ProtScannerCounts.cpp" />
+    <ClCompile Include="..\..\Src\ProtScannerData.cpp" />
+    <ClCompile Include="..\..\Src\ProtScannerEngine.cpp" />
+    <ClCompile Include="..\..\Src\ProtScannerState.cpp" />
+    <ClCompile Include="..\..\Src\Random.cpp" />
+    <ClCompile Include="..\..\Src\SiTypes.cpp" />
+    <ClCompile Include="..\..\Src\StationTypes.cpp" />
+    <ClCompile Include="..\..\Src\StationWrite.cpp" />
+    <ClCompile Include="..\..\Src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Stream.cpp" />
+    <ClCompile Include="..\..\Src\StreamLogger.cpp" />
+    <ClCompile Include="..\..\Src\TimeTypes.cpp" />
+    <ClCompile Include="..\..\Src\Utils.cpp" />
+    <ClCompile Include="..\..\Src\Ze.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Zee.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Zi.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
