@@ -39,36 +39,37 @@ void TEngine::Disconnect()
   UpdateState();  
 }
 
-void TEngine::DetectMaster()
+void TEngine::Detect(bool bMaster)
 {
-  TCmdsPerf cmdperf(m_Transceiver.Tr, &m_Err);
+  TPrefixParams PP1(true, 1);
+  TPrefixParams PP2(true, 2);
+
+  TCmdsPerf cmdperfMst(m_Transceiver.Tr, PP1, &m_Err);
   
   TCprSetMaSlaveE cprSmsE;
-  cprSmsE=cmdperf.SetMaSlaveE(true);
+  cprSmsE=cmdperfMst.SetMaSlaveE(bMaster);
   m_qobsMasterConnect(m_Queue);
   
+  TCmdsPerf cmdperfTrg(m_Transceiver.Tr, (bMaster? PP1: PP2), &m_Err);
+
   TCprGetSysValueE cprGsvE;
-  cprGsvE=cmdperf.GetSysValueE(0, 0x80);
+  cprGsvE=cmdperfTrg.GetSysValueE(0, 0x80);
   m_qobsMasterConnect(m_Queue);
-  m_cmdsGsveMaster=cprGsvE.m_BCmds;
   
-  UpdateState();  
+  if (bMaster) m_cmdsGsveMaster=cprGsvE.m_BCmds;
+          else m_cmdsGsveSlave =cprGsvE.m_BCmds;
+  
+  UpdateState();
+}
+
+void TEngine::DetectMaster()
+{
+  Detect(true);
 }
 
 void TEngine::DetectSlave()
 {
-  TCmdsPerf cmdperf(m_Transceiver.Tr, &m_Err);
-  
-  TCprSetMaSlaveE cprSmsE;
-  cprSmsE=cmdperf.SetMaSlaveE(false);
-  m_qobsMasterConnect(m_Queue);
-  
-  TCprGetSysValueE cprGsvE;
-  cprGsvE=cmdperf.GetSysValueE(0, 0x80);
-  m_qobsMasterConnect(m_Queue);
-  m_cmdsGsveSlave=cprGsvE.m_BCmds;
-  
-  UpdateState();
+  Detect(false);
 }
 
 TBsInfo GetBsInfo(const TBsConnectData    &bcd,
@@ -166,6 +167,15 @@ void TEngine::EndJob()
   m_scpJob.reset();
 }
 
+void TEngine::SetParams(bool bAutoDetectMasterEnabled,
+                        bool bAutoDetectSlaveEnabled,
+                        bool bAutoDumpSlaveEnabled)
+{
+  m_bAutoDetectMasterEnabled=bAutoDetectMasterEnabled;
+  m_bAutoDetectSlaveEnabled =bAutoDetectSlaveEnabled;
+  m_bAutoDumpSlaveEnabled   =bAutoDumpSlaveEnabled;
+}                        
+
 bool TEngine::DoJob()
 {
   if (!m_scpJob) return false;
@@ -253,16 +263,14 @@ TDumpJob::TDumpJob(const TBsInfo &absi, bool abMaster)
 
 bool TDumpJob::Start(TCmdTransceiver &Tr, TErrList *pErr)
 {
-  TCmdsPerf cmdperf(Tr, pErr);
+  TCmdsPerf cmdperf(Tr, TPrefixParams(), pErr);
   
   TCprSetMaSlaveE cprSmsE;
   cprSmsE=cmdperf.SetMaSlaveE(bMaster);
-//  m_qobsMasterConnect(m_Queue);
   if (!cprSmsE) return false;
   
   TCprGetSysValueE cprGsvE;
   cprGsvE=cmdperf.GetSysValueE(0, 0x80);
-//  m_qobsMasterConnect(m_Queue);
   if (!cprGsvE) return false;
 
   const CmdbBGetSysValueE *pCmd=cprGsvE.m_BCmds.Get();
@@ -281,7 +289,7 @@ bool TDumpJob::Do(TCmdTransceiver &Tr, TErrList *pErr)
   
   if (nCurAddr>=nMaxAddr) return false;
 
-  TCmdsPerf cmdperf(Tr, pErr);
+  TCmdsPerf cmdperf(Tr, TPrefixParams(), pErr);
   
   int nBlockSize=128;
   

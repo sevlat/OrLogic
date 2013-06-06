@@ -38,6 +38,8 @@ class TMainDialog
   void OnSlaveDetect();
   void OnSlaveDump();
 
+  void OnParamsChanged();
+
  public:
   void OnTimer(int IdTimer);
 

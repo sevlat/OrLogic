@@ -88,6 +88,7 @@ class TEngine {
   bool Do();
 
  private:
+  void Detect(bool bMaster);
   void StartDump(bool bMaster, const OBsInfo obsi);
 
   bool DoJob();
@@ -100,6 +101,11 @@ class TEngine {
   
   const TDumpJob* Job() const { return m_scpJob.get(); }
   
+ public:
+  void SetParams(bool bAutoDetectMasterEnabled,
+                 bool bAutoDetectSlaveEnabled,
+                 bool bAutoDumpSlaveEnabled);
+
  private:
   void UpdateState();
  
@@ -123,6 +129,7 @@ class TEngine {
  private:
   bool m_bDoing;
 
+ private:
   bool m_bAutoDetectMasterEnabled;
   bool m_bAutoDetectSlaveEnabled;
   bool m_bAutoDumpSlaveEnabled;

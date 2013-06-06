@@ -55,9 +55,11 @@ struct TCmdsPerfRet {
 
 class TCmdsPerf: public TCmdProcSetF_tmpl<TCmdsPerf, TCmdsPerfRet> {
  public:
-  TCmdsPerf(TCmdTransceiver &Transceiver,
-            TErrList        *pErr)
-   : m_Transceiver(Transceiver),
+  TCmdsPerf(      TCmdTransceiver &Transceiver,
+            const TPrefixParams   &PP,
+                  TErrList        *pErr)
+   : m_PP(PP),
+     m_Transceiver(Transceiver),
      m_pErr(pErr) {}
 
  public:
@@ -84,10 +86,13 @@ class TCmdsPerf: public TCmdProcSetF_tmpl<TCmdsPerf, TCmdsPerfRet> {
   template <typename FCMD>
   typename TCmdsPerfRet<FCMD>::TRes Do1(TCmdPtr<typename TCmdoGen<FCMD>::Type> cmds)
   {
-    const OCmdExch ocmde=m_Transceiver.Transceive(cmds, m_pErr);
+    const OCmdExch ocmde=m_Transceiver.Transceive(cmds, &m_PP, m_pErr);
     TCmdsPerfRes<FCMD::cc> res(ocmde);
     return res;
   }
+
+ private:
+  const TPrefixParams m_PP;
 
  private:
   TCmdTransceiver &m_Transceiver;

@@ -83,6 +83,12 @@ bool TMainDialog::OnCommand(int cmd)
     case IDC_SLAVE_DUMP:
       OnSlaveDump();
       return true;
+
+    case IDC_MASTER_DETECT_AUTO:
+    case IDC_SLAVE_DETECT_AUTO:
+    case IDC_SLAVE_DUMP_AUTO:
+      OnParamsChanged();
+      return true;
   }
   
   return false;
@@ -137,6 +143,20 @@ void TMainDialog::OnSlaveDump()
   UpdateUI();
 }
 
+void TMainDialog::OnParamsChanged()
+{
+  const bool bAutoDetectMasterEnabled=SendDlgItemMessage(m_hDlg,
+                IDC_MASTER_DETECT_AUTO, BM_GETCHECK, 0, 0)==BST_CHECKED;
+  const bool bAutoDetectSlaveEnabled=SendDlgItemMessage(m_hDlg,
+                IDC_SLAVE_DETECT_AUTO, BM_GETCHECK, 0, 0)==BST_CHECKED;
+  const bool bAutoDumpSlaveEnabled=SendDlgItemMessage(m_hDlg,
+                IDC_SLAVE_DUMP_AUTO, BM_GETCHECK, 0, 0)==BST_CHECKED;
+
+  m_Eng.SetParams(bAutoDetectMasterEnabled,
+                  bAutoDetectSlaveEnabled,
+                  bAutoDumpSlaveEnabled);
+  UpdateUI();
+}
 
 void TMainDialog::EnableControl(int IdCtrl, bool bEnable)
 {

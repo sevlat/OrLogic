@@ -30,7 +30,9 @@ class TCmdTransceiver {
                   TCmdSender   &CmdSender);
   
  public:
-  OCmdTxInfo Send(ShpFCmdObject shpFCmd, TErrList *pErr);
+  OCmdTxInfo Send(      ShpFCmdObject  shpFCmd,
+                  const TPrefixParams *pPP,
+                        TErrList      *pErr);
 
   void Receive(TErrList *pErr);
 
@@ -41,10 +43,12 @@ class TCmdTransceiver {
                                  TErrList   *pErr);
 
  public:
-  OCmdExch Transceive(ShpFCmdObject  shpFCmd,
-                      TErrList      *pErr);
-  OCmdExch TransceiveOnce(ShpFCmdObject  shpFCmd,
-                          TErrList      *pErr);
+  OCmdExch Transceive(      ShpFCmdObject  shpFCmd,
+                      const TPrefixParams *pPP,
+                            TErrList      *pErr);
+  OCmdExch TransceiveOnce(      ShpFCmdObject  shpFCmd,
+                          const TPrefixParams *pPP,
+                                TErrList      *pErr);
                           
  private:
   bool ReceiveCmd(TErrList *pErr);

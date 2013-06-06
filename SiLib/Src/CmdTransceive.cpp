@@ -23,9 +23,14 @@ TCmdTransceiver::TCmdTransceiver(TCmdQueue    &Queue,
 {
 }
 
-OCmdTxInfo TCmdTransceiver::Send(ShpFCmdObject shpFCmd, TErrList *pErr)
+OCmdTxInfo TCmdTransceiver::Send(      ShpFCmdObject  shpFCmd,
+                                 const TPrefixParams *pPP,
+                                       TErrList      *pErr)
 {
-  const OCmdTxInfo octi=m_CmdSender.Send(shpFCmd, m_mf, pErr);
+  TMsgFrame mf(m_mf);
+  if (pPP) mf.Prefix=TMsgPrefix(m_mf.Prefix, *pPP);
+  
+  const OCmdTxInfo octi=m_CmdSender.Send(shpFCmd, mf, pErr);
   if (!octi) return None;
 
   TFCmdTx CmdTx(shpFCmd, *octi);
@@ -50,23 +55,25 @@ bool TCmdTransceiver::ReceiveCmd(TErrList *pErr)
   return true;
 }
 
-OCmdExch TCmdTransceiver::Transceive(ShpFCmdObject  shpFCmd,
-                                     TErrList      *pErr)
+OCmdExch TCmdTransceiver::Transceive(      ShpFCmdObject  shpFCmd,
+                                     const TPrefixParams *pPP,
+                                           TErrList      *pErr)
 {
   OCmdExch ocmdx;
 
   for (int i=0; i<7; ++i) {
-    ocmdx=TransceiveOnce(shpFCmd, pErr);
+    ocmdx=TransceiveOnce(shpFCmd, pPP, pErr);
     if (ocmdx && ocmdx->Status()!=ICmdExch::sNak) break;
   }
 
   return ocmdx;
 }
 
-OCmdExch TCmdTransceiver::TransceiveOnce(ShpFCmdObject  shpFCmd,
-                                         TErrList      *pErr)
+OCmdExch TCmdTransceiver::TransceiveOnce(      ShpFCmdObject  shpFCmd,
+                                         const TPrefixParams *pPP,
+                                               TErrList      *pErr)
 {
-  const OCmdTxInfo octi=Send(shpFCmd, pErr);
+  const OCmdTxInfo octi=Send(shpFCmd, pPP, pErr);
   if (!octi) return None;
 
   const TCmdExch *pCmdExch=Receive3(octi, pErr);
@@ -152,7 +159,7 @@ bool TCmdsPerformer::Do()
 
 bool TCmdsPerformer::DoOnBegin()
 {
-  m_octi=m_Tr.Send(m_shpFCmd, m_pErr);
+  m_octi=m_Tr.Send(m_shpFCmd, 0, m_pErr);
   if (!m_octi) {
     m_State=sError;
     return true;
