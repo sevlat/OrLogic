@@ -32,8 +32,8 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,0,2
- PRODUCTVERSION 0,1,0,2
+ FILEVERSION 0,1,0,3
+ PRODUCTVERSION 0,1,0,3
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -50,12 +50,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "SeVlaT"
             VALUE "FileDescription", "SportIdend Base Station dumper"
-            VALUE "FileVersion", "0, 1, 0, 2"
+            VALUE "FileVersion", "0, 1, 0, 3"
             VALUE "InternalName", "SiBsDumpW"
             VALUE "LegalCopyright", "Copyright (C) 2013"
             VALUE "OriginalFilename", "SiBsDumpW.exe"
             VALUE "ProductName", "SiBsDumpW"
-            VALUE "ProductVersion", "0, 1, 0, 2"
+            VALUE "ProductVersion", "0, 1, 0, 3"
         END
     END
     BLOCK "VarFileInfo"
@@ -235,7 +235,7 @@ BEGIN
     LTEXT           "Mode",IDC_SLAVE_MODE_TITLE,231,54,34,12,SS_CENTERIMAGE
     EDITTEXT        IDC_SLAVE_MODE,269,54,40,12,ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Model",IDC_SLAVE_MODEL_TITLE,231,68,34,12,SS_CENTERIMAGE
-    EDITTEXT        IDC_SLAVE_MODEL,270,68,40,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_SLAVE_MODEL,269,68,40,12,ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "SerNum",IDC_SLAVE_SERNUM_TITLE,231,82,34,12,SS_CENTERIMAGE
     EDITTEXT        IDC_SLAVE_SERNUM,269,82,40,12,ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Bck Ptr",IDC_SLAVE_BCKPTR_TITLE,231,96,34,12,SS_CENTERIMAGE

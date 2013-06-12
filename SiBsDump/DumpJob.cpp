@@ -149,7 +149,7 @@ void TDumpJob::DoReadingSysMem(TCmdTransceiver &Tr, TErrList *pErr)
   }
 
   TPrefixParams PP(true, 1);
-  TTransceiveParams TP(&PP, 2, 7);
+  TTransceiveParams TP(&PP, 2, 9);
 
   TCmdsPerf cmdperf(Tr, TP, pErr);
 
@@ -194,17 +194,23 @@ void TDumpJob::DoReadingBckMem(TCmdTransceiver &Tr, TErrList *pErr)
     MainState=msSaving;
     return;
   }
+  
+  int nRealAddress=nCurAddr;
+  {
+    if (nCurAddr==3*nBlockSize) nRealAddress=nMaxAddr-nBlockSize;
+    if (nCurAddr> 3*nBlockSize) nRealAddress=nCurAddr-nBlockSize;
+  }
+  nCurAddr+=nBlockSize;
 
   TPrefixParams PP(true, 1);
-  TTransceiveParams TP(&PP, 2, 7);
+  TTransceiveParams TP(&PP, 2, 9);
 
   TCmdsPerf cmdperf(Tr, TP, pErr);
 
-  MemBuf.AddEmpty(nCurAddr, nBlockSize);
+  MemBuf.AddEmpty(nRealAddress, nBlockSize);
 
   TCprGetBckDataE cprGbdE;
-  cprGbdE=cmdperf.GetBckDataE(nCurAddr, nBlockSize);
-  nCurAddr+=nBlockSize;
+  cprGbdE=cmdperf.GetBckDataE(nRealAddress, nBlockSize);
   if (cprGbdE) {
     const CmdbBGetBckDataE *pCmd=cprGbdE.m_BCmds.Get();
     if (pCmd) {
