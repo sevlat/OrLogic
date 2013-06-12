@@ -43,6 +43,7 @@
 #define IDC_MASTER_DETECT               1027
 #define IDC_VERSION_LABEL               1027
 #define IDC_MASTER_DETECT_AUTO          1028
+#define IDC_BUILD_DATE                  1028
 #define IDC_MASTER_CODE_TITLE           1029
 #define IDC_MASTER_CODE                 1030
 #define IDC_SLAVE_DETECT                1031
@@ -51,16 +52,22 @@
 #define IDC_SLAVE_CODE                  1034
 #define IDC_COMPORT_STATUS              1035
 #define IDC_JOB                         1036
-#define IDC_JOB_STATUS                  1037
+#define IDC_JOB_STATUS_SHORT            1037
 #define IDC_JOB_STOP                    1038
 #define IDC_MASTER_BCKPTR               1039
-#define IDC_MASTER_OVERFLOW_TITLE        1040
-#define IDC_MASTER_OVERFLOW              1041
+#define IDC_MASTER_OVERFLOW_TITLE       1040
+#define IDC_MASTER_OVERFLOW             1041
 #define IDC_SLAVE_BCKPTR                1042
 #define IDC_MASTER_BCKPTR_TITLE         1043
 #define IDC_SLAVE_BCKPTR_TITLE          1044
-#define IDC_SLAVE_OVERFLOW_TITLE         1045
-#define IDC_SLAVE_OVERFLOW               1046
+#define IDC_SLAVE_OVERFLOW_TITLE        1045
+#define IDC_SLAVE_OVERFLOW              1046
+#define IDC_JOB_STATUS_LONG             1047
+#define IDC_TIME_TOTAL_TITLE            1048
+#define IDC_TIME_ELAPSED_TITLE          1049
+#define IDC_TIME_LEFT_TITLE             1050
+#define IDC_TIME_IDC_TIME_LEFT          1051
+#define IDC_TIME_TITLE                  1051
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -70,7 +77,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1037
+#define _APS_NEXT_CONTROL_VALUE         1052
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

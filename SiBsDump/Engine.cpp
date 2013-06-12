@@ -19,7 +19,7 @@ TEngine::TEngine(void)
    m_bAutoDetectMasterEnabled(false),
    m_bAutoDetectSlaveEnabled(false),
    m_bAutoDumpSlaveEnabled(false),
-   m_bDoing(false)                   
+   m_bDoing(false)
 {
 }
 
@@ -28,37 +28,47 @@ void TEngine::Connect(const TString &sPort)
   IComPort &cp=m_cp.get();
   const bool bResOpen=m_cp.get().Open(sPort, &m_Err);
   const bool bSetRate=m_cp.get().SetBaudRate(38400, &m_Err);
-  
-  UpdateState();  
+
+  UpdateState();
 }
 
 void TEngine::Disconnect()
 {
   m_cp.get().Close(0);
-  
-  UpdateState();  
+
+  UpdateState();
 }
 
 void TEngine::Detect(bool bMaster)
 {
   TPrefixParams PP1(true, 1);
   TPrefixParams PP2(true, 2);
-
-  TCmdsPerf cmdperfMst(m_Transceiver.Tr, PP1, &m_Err);
   
+  TTransceiveParams TP1(&PP1, 2, 7);
+  TTransceiveParams TP2(&PP2, 2, 7);
+
+  TCmdsPerf cmdperfMst(m_Transceiver.Tr, TP1, &m_Err);
+
   TCprSetMaSlaveE cprSmsE;
   cprSmsE=cmdperfMst.SetMaSlaveE(bMaster);
   m_qobsMasterConnect(m_Queue);
-  
-  TCmdsPerf cmdperfTrg(m_Transceiver.Tr, (bMaster? PP1: PP2), &m_Err);
+  if (!cprSmsE) {
+    m_obsMasterConnect.ObscureAll(None); //!!!!! temporary 
+    m_cmdsGsveMaster=0;
+    m_cmdsGsveSlave=0;
+    UpdateState();
+    return;
+  }
+
+  TCmdsPerf cmdperfTrg(m_Transceiver.Tr, (bMaster? TP1: TP2), &m_Err);
 
   TCprGetSysValueE cprGsvE;
   cprGsvE=cmdperfTrg.GetSysValueE(0, 0x80);
   m_qobsMasterConnect(m_Queue);
-  
+
   if (bMaster) m_cmdsGsveMaster=cprGsvE.m_BCmds;
           else m_cmdsGsveSlave =cprGsvE.m_BCmds;
-  
+
   UpdateState();
 }
 
@@ -76,17 +86,17 @@ TBsInfo GetBsInfo(const TBsConnectData    &bcd,
                   const CmdsBGetSysValueE &cmdsBGsve)
 {
   TBsInfo bsi;
-  
+
   if (bcd.cvBsCodeW.oVal) {
     bsi.oCode=TBsCode(bcd.cvBsCodeW.oVal->Get());
   } else if (bcd.cvBsCodeB.oVal) {
     bsi.oCode=TBsCode(bcd.cvBsCodeB.oVal->Get());
   }
-  
+
   if (bcd.cvBsSerNum.oVal) {
     bsi.oSerNum=bcd.cvBsSerNum.oVal;
   }
-  
+
   if (bcd.cvBsMode.oVal) {
     bsi.oMode=bcd.cvBsMode.oVal;
   }
@@ -94,7 +104,7 @@ TBsInfo GetBsInfo(const TBsConnectData    &bcd,
   if (bcd.cvBsModel.oVal) {
     bsi.oModel=bcd.cvBsModel.oVal;
   }
-  
+
   if (cmdsBGsve) {
     const TBsMemoryMaskNew bsmm;
 
@@ -102,7 +112,7 @@ TBsInfo GetBsInfo(const TBsConnectData    &bcd,
     bsi.onBackupPtr=OptFromOpt<TUInt>(bsMem.Get(bsmm.bbaBackupPtr));
     bsi.obOverflow=OptFromOpt<bool>(bsMem.Get(bsmm.bbaOverflow));
   }
-  
+
   return bsi;
 }
 
@@ -114,57 +124,65 @@ void TEngine::UpdateState()
   } else {
     m_State.osConnected=None;
   }
-  
+
   {
     const TMasterConnectData &mcd=m_obsMasterConnect.MasterConnectData();
-    if (mcd.cvbPresent.oVal) {
+    if (mcd.cvbPresent.oVal &&
+        m_cmdsGsveMaster) {    //!!!!! temporary 
       m_State.obsiMaster=GetBsInfo(mcd, m_cmdsGsveMaster);
     } else {
       m_State.obsiMaster=None;
     }
   }
-  
+
   {
     const TSlaveConnectData &mcd=m_obsMasterConnect.SlaveConnectData();
-    if (mcd.cvbPresent.oVal) {
+    if (mcd.cvbPresent.oVal &&
+        m_cmdsGsveSlave) {
       m_State.obsiSlave=GetBsInfo(mcd, m_cmdsGsveSlave);
     } else {
       m_State.obsiSlave=None;
     }
   }
-
-  m_State.pJobInfo=m_scpJob.get();
 }
 
-void TEngine::StartDump(bool bMaster, const OBsInfo obsi)
+void TEngine::Abort()
 {
-  if (m_scpJob) return;
-  if (!obsi) return;
-  
-  m_scpJob.reset(new TDumpJob(*obsi, bMaster));
-  
-  const bool bStarted=m_scpJob->Start(m_Transceiver.Tr, &m_Err);
-  m_qobsMasterConnect(m_Queue);
-
-  if (!bStarted) EndJob();
+  if (IsReading()) m_shpJob->Abort();
 }
 
-void TEngine::DumpMaster()
+bool TEngine::IsReading() const
 {
-  StartDump(true, m_State.obsiMaster);
+  return m_shpJob && (m_shpJob->MainState==TDumpJobInfo::msReading);
 }
 
-void TEngine::DumpSlave()
+bool TEngine::IsIdle() const
 {
-  StartDump(false, m_State.obsiSlave);
+  return !m_shpJob || (m_shpJob->MainState==TDumpJobInfo::msEnd);
 }
 
-void TEngine::EndJob()
+bool TEngine::CanStartDump(const OBsInfo &obsi) const
 {
-  if (!m_scpJob) return;
-  
-  m_scpJob->Save();
-  m_scpJob.reset();
+  return IsIdle() && obsi;
+}
+
+const OBsInfo& TEngine::BsInfo(bool bMaster) const
+{
+  if (bMaster) return m_State.obsiMaster;
+               return m_State.obsiSlave;
+}
+
+void TEngine::StartDump(bool bMaster)
+{
+  const OBsInfo &obsi=BsInfo(bMaster);
+  if (!CanStartDump(obsi)) return;
+
+  m_shpJob.reset(new TDumpJob(bMaster, *obsi));
+}
+
+bool TEngine::CanStartDump(bool bMaster) const
+{
+  return CanStartDump(BsInfo(bMaster));
 }
 
 void TEngine::SetParams(bool bAutoDetectMasterEnabled,
@@ -174,28 +192,27 @@ void TEngine::SetParams(bool bAutoDetectMasterEnabled,
   m_bAutoDetectMasterEnabled=bAutoDetectMasterEnabled;
   m_bAutoDetectSlaveEnabled =bAutoDetectSlaveEnabled;
   m_bAutoDumpSlaveEnabled   =bAutoDumpSlaveEnabled;
-}                        
+}
 
 bool TEngine::DoJob()
 {
-  if (!m_scpJob) return false;
+  if (IsIdle()) return false;
 
-  const bool bRes=m_scpJob->Do(m_Transceiver.Tr, &m_Err);
+  m_shpJob->Do(m_Transceiver.Tr, &m_Err);
   m_qobsMasterConnect(m_Queue);
 
-  if (!bRes) EndJob();
   return true;
 }
 
 bool TEngine::DoAutoDetectMaster()
 {
   if (!m_bAutoDetectMasterEnabled) return false;
-  
-  if (m_scpJob) return false;
+
+  if (!IsIdle()) return false;
   if (m_State.obsiMaster) return false;
-  
+
   DetectMaster();
-  
+
   return true;
 }
 
@@ -203,11 +220,11 @@ bool TEngine::DoAutoDetectSlave()
 {
   if (!m_bAutoDetectSlaveEnabled) return false;
 
-  if (m_scpJob) return false;
+  if (!IsIdle()) return false;
   if (m_State.obsiSlave) return false;
-  
+
   DetectSlave();
-  
+
   return true;
 }
 
@@ -215,9 +232,11 @@ bool TEngine::DoAutoDumpSlave()
 {
   if (!m_bAutoDumpSlaveEnabled) return false;
 
-  if (m_scpJob) return false;
-  if (m_State.obsiSlave) return false;
+  if (!IsIdle()) return false;
+  if (!m_State.obsiSlave) return false;
 
+//  StartDump(false, m_State.obsiSlave);
+// Check previous dumped slave station
   return false;
 }
 
@@ -230,101 +249,8 @@ bool TEngine::Do()
   DoAutoDetectMaster() ||
   DoAutoDetectSlave() ||
   DoAutoDumpSlave();
-  
+
   UpdateState();
 
   return true;
 }
-
- 
-////////////////////////////////////////////////////////////////////////////////
-TDumpJobInfo::TDumpJobInfo(const TBsInfo &absi, bool abMaster)
- : bsi(absi),
-   bMaster(abMaster),
-   nCurAddr(0x100),
-//   nMaxAddr(128*1024) 
-   nMaxAddr(128*100),
-   m_TimeEstimator(GetSysTime(),
-                   milliseconds(5000),
-                   milliseconds(30000),
-                   milliseconds(300),
-                   milliseconds(1*60*60*1000))
-{
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-TDumpJob::TDumpJob(const TBsInfo &absi, bool abMaster)
- : TDumpJobInfo(absi, abMaster)
-{
-  m_TimeEstimator.Reset(GetSysTime(), nCurAddr);
-}
-
-
-bool TDumpJob::Start(TCmdTransceiver &Tr, TErrList *pErr)
-{
-  TCmdsPerf cmdperf(Tr, TPrefixParams(), pErr);
-  
-  TCprSetMaSlaveE cprSmsE;
-  cprSmsE=cmdperf.SetMaSlaveE(bMaster);
-  if (!cprSmsE) return false;
-  
-  TCprGetSysValueE cprGsvE;
-  cprGsvE=cmdperf.GetSysValueE(0, 0x80);
-  if (!cprGsvE) return false;
-
-  const CmdbBGetSysValueE *pCmd=cprGsvE.m_BCmds.Get();
-  if (!pCmd) return false;
-
-  if (bsi.oCode && 
-      bsi.oCode->Get()!=pCmd->wCN) return false;
-
-  MemBuf.Add(TBiasedByteBuffer(pCmd->data, pCmd->bAddr));
-  return true;
-}
-
-bool TDumpJob::Do(TCmdTransceiver &Tr, TErrList *pErr)
-{
-  Tick();
-  
-  if (nCurAddr>=nMaxAddr) return false;
-
-  TCmdsPerf cmdperf(Tr, TPrefixParams(), pErr);
-  
-  int nBlockSize=128;
-  
-  MemBuf.AddEmpty(nCurAddr, nBlockSize);
-
-  TCprGetBckDataE cprGbdE;
-  cprGbdE=cmdperf.GetBckDataE(nCurAddr, nBlockSize);
-  nCurAddr+=nBlockSize;
-  if (cprGbdE) {
-    const CmdbBGetBckDataE *pCmd=cprGbdE.m_BCmds.Get();
-    if (pCmd) {
-      if (bsi.oCode && 
-          bsi.oCode->Get()!=pCmd->wCN) return false;
-
-      MemBuf.Add(TBiasedByteBuffer(pCmd->data, pCmd->dwAddr));
-    }
-  }
-
-  Tick();
-  return true;
-}
-
-void TDumpJob::Tick()
-{
-  m_TimeEstimator.Tick(GetSysTime(), nCurAddr, nMaxAddr);
-}
-
-void TDumpJob::Save()
-{
-  if (MemBuf.Empty()) return;
-  
-  std::string sFileName=GetDumpFileName(bsi.oSerNum.Get(TBsSerNum()).Get());
-  
-  std::ofstream fDump(sFileName.c_str(), std::ios::binary);
-  MemBuf.Save(fDump);
-}
-  
-

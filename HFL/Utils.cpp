@@ -22,11 +22,11 @@ std::string GenerateFileName(const std::string &sPrefix,
   char szDateTime[256]="";
   if (bDate && bTime) {
     sprintf(szDateTime, "%02d_%02d_%02d__%02d_%02d_%02d",
-            nYear, pT->tm_mon,  pT->tm_mday,
+            nYear, pT->tm_mon+1,  pT->tm_mday,
             pT->tm_hour, pT->tm_min, pT->tm_sec);
   } else if (bDate && !bTime) {
     sprintf(szDateTime, "%02d_%02d_%02d",
-            nYear, pT->tm_mon,  pT->tm_mday);
+            nYear, pT->tm_mon+1,  pT->tm_mday);
   } else if (!bDate && bTime) {
     sprintf(szDateTime, "%02d_%02d_%02d",
             pT->tm_hour, pT->tm_min, pT->tm_sec);

@@ -115,7 +115,7 @@ basic_string<CH> TBsConstName<CH, PREF>::Get(TBsModeRaw  bmr)
 
   basic_string<CH> s=AW_STRING(Unk);
   s+=CH(' ');
-  s+=HexBConstName(0, bmr.dwMode, szBuffer);
+  s+=HexConstName(0, bmr.dwMode, szBuffer);
   
   return s;
 }
@@ -130,7 +130,7 @@ basic_string<CH> TBsConstName<CH, PREF>::Get(TBsModelRaw bmr)
 
   basic_string<CH> s=AW_STRING(Unk);
   s+=CH(' ');
-  s+=HexBConstName(0, bmr.dwModel, szBuffer);
+  s+=HexConstName(0, bmr.dwModel, szBuffer);
   
   return s;
 }

@@ -89,6 +89,9 @@ bool TMainDialog::OnCommand(int cmd)
     case IDC_SLAVE_DUMP_AUTO:
       OnParamsChanged();
       return true;
+
+    case IDC_JOB_STOP:
+      OnStopClicked();
   }
   
   return false;
@@ -127,7 +130,7 @@ void TMainDialog::OnMasterDetect()
 
 void TMainDialog::OnMasterDump()
 {
-  m_Eng.DumpMaster();
+  m_Eng.StartDump(true);
   UpdateUI();
 }
 
@@ -139,7 +142,13 @@ void TMainDialog::OnSlaveDetect()
 
 void TMainDialog::OnSlaveDump()
 {
-  m_Eng.DumpSlave();
+  m_Eng.StartDump(false);
+  UpdateUI();
+}
+
+void TMainDialog::OnStopClicked()
+{
+  m_Eng.Abort();
   UpdateUI();
 }
 
@@ -162,6 +171,15 @@ void TMainDialog::EnableControl(int IdCtrl, bool bEnable)
 {
   const HWND hCtrl=GetDlgItem(m_hDlg, IdCtrl);
   if (hCtrl) EnableWindow(hCtrl, bEnable);
+}
+
+void TMainDialog::ShowControl(int IdCtrl, bool bShow)
+{
+  const HWND hCtrl=GetDlgItem(m_hDlg, IdCtrl);
+  if (!hCtrl) return;
+  
+  if (bShow) ShowWindow(hCtrl, SW_SHOW);
+        else ShowWindow(hCtrl, SW_HIDE);
 }
 
 TString GetStringValue(const TBsModeRaw  &bmr) { return TBsConstNameW::Get(bmr); }
@@ -234,7 +252,7 @@ void TMainDialog::UpdateUI()
     UpdateCtrl(IDC_MASTER_OVERFLOW, IDC_MASTER_OVERFLOW_TITLE,
                State.obsiMaster,   &TBsInfo::obOverflow);
     
-    EnableControl(IDC_MASTER_DUMP, State.obsiMaster && !m_Eng.Job());
+    EnableControl(IDC_MASTER_DUMP,   m_Eng.CanStartDump(true));
     EnableControl(IDC_MASTER_DETECT, State.osConnected);
   }
   
@@ -252,35 +270,81 @@ void TMainDialog::UpdateUI()
     UpdateCtrl(IDC_SLAVE_OVERFLOW,  IDC_SLAVE_OVERFLOW_TITLE,
                State.obsiSlave,    &TBsInfo::obOverflow);
 
-    EnableControl(IDC_SLAVE_DUMP,  State.obsiSlave && !m_Eng.Job());
+    EnableControl(IDC_SLAVE_DUMP,   m_Eng.CanStartDump(false));
     EnableControl(IDC_SLAVE_DETECT, State.osConnected);
   }
   
-  {
-    EnableControl(IDC_JOB,        State.pJobInfo!=0);
-    EnableControl(IDC_JOB_STATUS, State.pJobInfo!=0);
+  EnableControl(IDC_SLAVE_DETECT_AUTO, false);
+  EnableControl(IDC_MASTER_DETECT_AUTO, false);
+  EnableControl(IDC_SLAVE_DUMP_AUTO, false);
 
-    if (State.pJobInfo) {
-      TString sText=L"Dumping ";
-      if (State.pJobInfo->bMaster) sText+=L" master";
-                              else sText+=L" slave";
+  EnableControl(IDC_JOB_STOP, m_Eng.IsReading());
+  
+  {
+    const TDumpJobInfo *pJobInfo=m_Eng.Job();
+    if (pJobInfo) {
+      const TDumpJobInfo &JobInfo=*pJobInfo;
       
-      SetDlgItemText(m_hDlg, IDC_JOB_STATUS, sText.c_str());
+      const TString sTextLong=JobInfo.GetStatusText();
       
-      SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETRANGE32,
-                         0x100, State.pJobInfo->nMaxAddr); //!!!!
-      SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETPOS,
-                         State.pJobInfo->nCurAddr, 0);
+      TString sTextShort;
+      if (JobInfo.bMaster) sTextShort=L"Master";
+                      else sTextShort=L"Slave";
+
+      SetDlgItemText(m_hDlg, IDC_JOB_STATUS_SHORT, sTextShort.c_str());
+      SetDlgItemText(m_hDlg, IDC_JOB_STATUS_LONG,  sTextLong.c_str());
+      
+      if (m_Eng.IsReading()) {
+        SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETRANGE32,
+                           0x100, JobInfo.nMaxAddr); //!!!!
+        SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETPOS,
+                           JobInfo.nCurAddr, 0);
+      } else {
+        SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETRANGE32, 0, 0);
+        SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETPOS, 0, 0);
+      }                           
                 
-      const TTimeEstimator &te=State.pJobInfo->m_TimeEstimator;
-      
-//      ShowControl(m_hDlg, IDC_TIME_TOTAL,        true);
+    } else {
+      SetDlgItemText(m_hDlg, IDC_JOB_STATUS_SHORT, L"");
+      SetDlgItemText(m_hDlg, IDC_JOB_STATUS_LONG,  L"");
+
+      SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETRANGE32, 0, 0);
+      SendDlgItemMessage(m_hDlg, IDC_PROGRESS, PBM_SETPOS, 0, 0);
+    }
+    
+    if (!m_Eng.IsIdle() && pJobInfo) {
+      EnableControl(IDC_JOB,              true);
+      EnableControl(IDC_JOB_STATUS_SHORT, true);
+      EnableControl(IDC_JOB_STATUS_LONG,  true);
+
+      ShowControl(IDC_TIME_TITLE,         true);
+      ShowControl(IDC_TIME_TOTAL_TITLE,   true);
+      ShowControl(IDC_TIME_LEFT_TITLE,    true);
+      ShowControl(IDC_TIME_ELAPSED_TITLE, true);
+
+      ShowControl(IDC_TIME_TOTAL,         true);
+      ShowControl(IDC_TIME_LEFT,          true);
+      ShowControl(IDC_TIME_ELAPSED,       true);
+
+      const TTimeEstimator &te=pJobInfo->m_TimeEstimator;
 
       SetDlgItemText(m_hDlg, IDC_TIME_TOTAL,   GetStringValue(te.Total()).c_str());
       SetDlgItemText(m_hDlg, IDC_TIME_LEFT,    GetStringValue(te.Rest()).c_str());
       SetDlgItemText(m_hDlg, IDC_TIME_ELAPSED, GetStringValue(te.Spent()).c_str());
+
     } else {
-      SetDlgItemText(m_hDlg, IDC_JOB_STATUS, L"");
+      EnableControl(IDC_JOB,              false);
+      EnableControl(IDC_JOB_STATUS_SHORT, false);
+      EnableControl(IDC_JOB_STATUS_LONG,  false);
+
+      ShowControl(IDC_TIME_TITLE,         false);
+      ShowControl(IDC_TIME_TOTAL_TITLE,   false);
+      ShowControl(IDC_TIME_LEFT_TITLE,    false);
+      ShowControl(IDC_TIME_ELAPSED_TITLE, false);
+
+      ShowControl(IDC_TIME_TOTAL,         false);
+      ShowControl(IDC_TIME_LEFT,          false);
+      ShowControl(IDC_TIME_ELAPSED,       false);
 
       SetDlgItemText(m_hDlg, IDC_TIME_TOTAL,   L"");
       SetDlgItemText(m_hDlg, IDC_TIME_LEFT,    L"");

@@ -32,8 +32,8 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,0,1
- PRODUCTVERSION 0,1,0,1
+ FILEVERSION 0,1,0,2
+ PRODUCTVERSION 0,1,0,2
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -50,12 +50,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "SeVlaT"
             VALUE "FileDescription", "SportIdend Base Station dumper"
-            VALUE "FileVersion", "0, 1, 0, 1"
+            VALUE "FileVersion", "0, 1, 0, 2"
             VALUE "InternalName", "SiBsDumpW"
             VALUE "LegalCopyright", "Copyright (C) 2013"
             VALUE "OriginalFilename", "SiBsDumpW.exe"
             VALUE "ProductName", "SiBsDumpW"
-            VALUE "ProductVersion", "0, 1, 0, 1"
+            VALUE "ProductVersion", "0, 1, 0, 2"
         END
     END
     BLOCK "VarFileInfo"
@@ -157,7 +157,7 @@ BEGIN
         RIGHTMARGIN, 204
         VERTGUIDE, 40
         TOPMARGIN, 7
-        BOTTOMMARGIN, 78
+        BOTTOMMARGIN, 94
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -245,29 +245,32 @@ BEGIN
     PUSHBUTTON      "Dump",IDC_SLAVE_DUMP,231,124,34,14
     CONTROL         "Auto",IDC_SLAVE_DUMP_AUTO,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,269,124,31,14
     GROUPBOX        "Job",IDC_JOB,7,142,308,68
-    EDITTEXT        IDC_JOB_STATUS,14,155,295,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_JOB_STATUS_SHORT,14,155,54,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_JOB_STATUS_LONG,73,155,236,14,ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PROGRESS,"msctls_progress32",WS_BORDER,14,174,295,14
-    PUSHBUTTON      "Stop",IDC_JOB_STOP,14,192,33,14
-    LTEXT           "Time:",IDC_STATIC,73,195,18,8
-    LTEXT           "Total",IDC_STATIC,105,195,17,8
+    PUSHBUTTON      "Abort",IDC_JOB_STOP,14,192,33,14
+    LTEXT           "Time:",IDC_TIME_TITLE,73,195,18,8
+    LTEXT           "Total",IDC_TIME_TOTAL_TITLE,105,195,17,8
     RTEXT           "00:00:00",IDC_TIME_TOTAL,136,195,35,8,SS_SUNKEN
-    LTEXT           "Elapsed",IDC_STATIC,181,195,26,8
+    LTEXT           "Elapsed",IDC_TIME_ELAPSED_TITLE,181,195,26,8
     RTEXT           "00:00:00",IDC_TIME_ELAPSED,214,195,35,8,SS_SUNKEN
-    LTEXT           "Left",IDC_STATIC,256,195,14,8
+    LTEXT           "Left",IDC_TIME_LEFT_TITLE,256,195,14,8
     RTEXT           "00:00:00",IDC_TIME_LEFT,274,195,35,8,SS_SUNKEN
 END
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 211, 85
+IDD_ABOUTBOX DIALOGEX 0, 0, 211, 101
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About SiBsDumperW"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    ICON            IDI_SIBSDUMPW,IDC_STATIC,14,14,20,20
+    ICON            IDI_SIBSDUMPW,IDC_STATIC,14,14,21,20
     LTEXT           "SiBsDumper (native Windows)",IDC_STATIC,40,7,114,8,SS_NOPREFIX
-    LTEXT           "Copyright (C) SeVlaT, 2013",IDC_STATIC,40,54,114,8
-    DEFPUSHBUTTON   "OK",IDOK,154,64,50,14,WS_GROUP
+    LTEXT           "Copyright (C) SeVlaT, 2013",IDC_STATIC,40,68,114,8
+    DEFPUSHBUTTON   "OK",IDOK,154,80,50,14,WS_GROUP
     LTEXT           "Version",IDC_VERSION_LABEL,40,44,164,8,SS_NOPREFIX
     LTEXT           "SportIdent base station memory dumping utility.",IDC_STATIC,40,20,133,20,SS_NOPREFIX
+    LTEXT           "_DATE_",IDC_BUILD_DATE,92,57,112,8,SS_NOPREFIX
+    LTEXT           "Build date",IDC_STATIC,40,57,32,8
 END
 
 

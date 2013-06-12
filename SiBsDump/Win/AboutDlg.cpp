@@ -7,6 +7,10 @@
 
 #include "resource.h"
 
+#define WIDEN_STRING_LITERAL2(x) L ## x
+#define WIDEN_STRING_LITERAL(x) WIDEN_STRING_LITERAL2(x)
+
+
 // Message handler for about box.
 INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -15,6 +19,7 @@ INT_PTR CALLBACK AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
   switch (message) {
     case WM_INITDIALOG:
       SetDlgItemText(hDlg, IDC_VERSION_LABEL, GetVersionString(L"Ver. ", 4).c_str());
+      SetDlgItemText(hDlg, IDC_BUILD_DATE, WIDEN_STRING_LITERAL(__DATE__));
       return (INT_PTR)TRUE;
 
     case WM_COMMAND:

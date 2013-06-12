@@ -159,6 +159,7 @@ void TBsMasterConnectObs::ConfirmExt(OSysTime ot, TWord wCN)
 void TBsMasterConnectObs::ObscureAll(OSysTime ot)
 {
   m_mcd.Obscure(ot);
+  m_scd.Obscure(ot);
   m_cvbMasterMode.Obscure(ot);
 }
 

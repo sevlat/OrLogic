@@ -32,9 +32,15 @@ OBufTxInfo TBufSender::Send(const TByteBuffer &buf,
 {
   TUInt nPos=0;
   
+  int nFailCount=0;
+  
   while (nPos<buf.size()) {
     const OChunkTxInfo octi=m_cs.Send(buf, nPos, pErr);
     if (!octi) return None;
+    
+    if (octi->nSent==0) ++nFailCount;
+    
+    if (nFailCount>=3) return None;
     
     nPos+=octi->nSent;
   }

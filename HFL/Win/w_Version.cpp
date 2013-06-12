@@ -4,7 +4,7 @@
 
 #include <HFTL/Main/m_Memory.h>
 
-#pragma comment( lib, "version")
+#pragma comment(lib, "version")
 
 using hftl::TOptional;
 using hftl::None;

@@ -22,6 +22,24 @@ class TCmdSender;
 class TCmdReceiver;
 
 ////////////////////////////////////////////////////////////////////////////////
+struct TTransceiveParams {
+  const TPrefixParams *pPP;
+  
+  int nMaxFailCount; 
+  int nMaxNakCount;
+  
+  TTransceiveParams(const TPrefixParams *apPP,
+                          int            anMaxFailCount,
+                          int            anMaxNakCount)
+   : pPP(apPP),
+     nMaxFailCount(anMaxFailCount), 
+     nMaxNakCount(anMaxNakCount)  {}
+  
+  TTransceiveParams()
+   : pPP(0),
+     nMaxFailCount(1), 
+     nMaxNakCount(7)  {}
+};
 
 class TCmdTransceiver {
  public:
@@ -43,12 +61,12 @@ class TCmdTransceiver {
                                  TErrList   *pErr);
 
  public:
-  OCmdExch Transceive(      ShpFCmdObject  shpFCmd,
-                      const TPrefixParams *pPP,
-                            TErrList      *pErr);
-  OCmdExch TransceiveOnce(      ShpFCmdObject  shpFCmd,
-                          const TPrefixParams *pPP,
-                                TErrList      *pErr);
+  OCmdExch Transceive(      ShpFCmdObject      shpFCmd,
+                      const TTransceiveParams *pTP,
+                            TErrList          *pErr);
+  OCmdExch TransceiveOnce(      ShpFCmdObject      shpFCmd,
+                          const TTransceiveParams *pTP,
+                                TErrList          *pErr);
                           
  private:
   bool ReceiveCmd(TErrList *pErr);

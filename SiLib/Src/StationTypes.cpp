@@ -32,8 +32,8 @@ TUInt TMsgPrefix::Size() const
 {
   int nSize=0;
   if (bWakeUp) ++nSize;
-  if (nStx==1) ++nSize;
-  if (nStx==2) ++nSize;
+  if (nStx>0)  ++nSize;
+  if (nStx>1)  ++nSize;
   return nSize;
 }
 
@@ -67,4 +67,3 @@ TUInt TMsgFrame::Size() const
 {
   return Prefix.Size()+1;
 }
-

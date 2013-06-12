@@ -12,6 +12,9 @@
 
 #include "../Engine.h"
 
+#pragma comment(lib, "comctl32.lib")
+
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:

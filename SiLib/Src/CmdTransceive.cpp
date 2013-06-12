@@ -55,24 +55,40 @@ bool TCmdTransceiver::ReceiveCmd(TErrList *pErr)
   return true;
 }
 
-OCmdExch TCmdTransceiver::Transceive(      ShpFCmdObject  shpFCmd,
-                                     const TPrefixParams *pPP,
-                                           TErrList      *pErr)
+OCmdExch TCmdTransceiver::Transceive(      ShpFCmdObject      shpFCmd,
+                                     const TTransceiveParams *pTP,
+                                           TErrList          *pErr)
 {
+  TTransceiveParams TP;
+  if (pTP) TP=*pTP;
+ 
   OCmdExch ocmdx;
 
-  for (int i=0; i<7; ++i) {
-    ocmdx=TransceiveOnce(shpFCmd, pPP, pErr);
-    if (ocmdx && ocmdx->Status()!=ICmdExch::sNak) break;
-  }
+  int nFailCount=0; 
+  int nNakCount=0;
+  
+  do {
+    ocmdx=TransceiveOnce(shpFCmd, pTP, pErr);
+    
+    if (ocmdx) {
+      if (ocmdx->Status()==ICmdExch::sNak) ++nNakCount;
+                                      else break;
+    } else {
+      ++nFailCount;
+    }
+  } while (nFailCount<TP.nMaxFailCount &&
+           nNakCount <TP.nMaxNakCount);
 
   return ocmdx;
 }
 
-OCmdExch TCmdTransceiver::TransceiveOnce(      ShpFCmdObject  shpFCmd,
-                                         const TPrefixParams *pPP,
-                                               TErrList      *pErr)
+OCmdExch TCmdTransceiver::TransceiveOnce(      ShpFCmdObject      shpFCmd,
+                                         const TTransceiveParams *pTP,
+                                               TErrList          *pErr)
 {
+  const TPrefixParams *pPP=0;
+  if (pTP) pPP=pTP->pPP;
+  
   const OCmdTxInfo octi=Send(shpFCmd, pPP, pErr);
   if (!octi) return None;
 

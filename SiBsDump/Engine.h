@@ -5,87 +5,62 @@
 //
 
 #include "Types.h"
-#include "TimeEstimate.h"
+#include "DumpJob.h"
 
 #include <SiLib/BsMasterConnect.h>
 #include <SiLib/StreamLogger.h>
 
 #include <SiLib/Ext/ComPortShr.h>
 #include <SiLib/Ext/CmdQueue.h>
-#include <SiLib/Ext/CmdTransceive.h>
-
-#include <SiLib/BsMemBuf.h>
-
-struct TDumpJobInfo {
-  TBsInfo      bsi;
-  bool         bMaster;
-  int          nCurAddr;
-  int          nMaxAddr;
-  
-  TTimeEstimator m_TimeEstimator;
-
-  TDumpJobInfo(const TBsInfo &absi, bool abMaster);
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 struct TEngineState {
   OString osConnected;
-  
+
   OBsInfo obsiMaster;
-  OBsInfo obsiSlave;  
-  
-  const TDumpJobInfo *pJobInfo;
-  
+  OBsInfo obsiSlave;
+
  public:
-  TEngineState()
-   : pJobInfo(0) {}
-  
+  TEngineState() {}
+
  public:
   bool CanConnect()    const { return !osConnected; }
   bool CanDisconnect() const { return  osConnected; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-struct TDumpJob: public TDumpJobInfo {
-  TBsMemBuffer MemBuf;
-  scoped_ptr<TCmdsPerformer> scpPerformer;
-  
-  TDumpJob(const TBsInfo &absi, bool abMaster);
-  
-  bool Do(TCmdTransceiver &Tr, TErrList *pErr);
-  bool Start(TCmdTransceiver &Tr, TErrList *pErr);
-  void Save();
-  void Tick();
-};
-
-typedef TCmdShpTraits_Cmd<CmdbBGetSysValueE>::ShpCmd CmdsBGetSysValueE;
-
-////////////////////////////////////////////////////////////////////////////////
 class TEngine {
  public:
   TEngine();
- 
+
  public:
   void Connect(const TString &sPort);
   void Disconnect();
-  
+
  public:
   void DetectMaster();
-  void DumpMaster();
-
   void DetectSlave();
-  void DumpSlave();
+
+  bool CanStartDump(bool bMaster) const;
+  void StartDump(bool bMaster);
 
  public:
-
-  void EndJob();
+  void Abort();
 
  public:
   const OBsInfo& MBsInfo() const;
   const OBsInfo& SBsInfo() const;
 
  public:
+  bool IsReading() const;
+  bool IsIdle() const;
+
+ public:
   bool Do();
+
+ private:
+  bool CanStartDump(const OBsInfo &obsi) const;
+  const OBsInfo& BsInfo(bool bMaster) const;
 
  private:
   void Detect(bool bMaster);
@@ -98,9 +73,9 @@ class TEngine {
 
  public:
   const TEngineState& State() const { return m_State; }
-  
-  const TDumpJob* Job() const { return m_scpJob.get(); }
-  
+
+  const TDumpJob* Job()  const { return m_shpJob.get(); }
+
  public:
   void SetParams(bool bAutoDetectMasterEnabled,
                  bool bAutoDetectSlaveEnabled,
@@ -108,12 +83,12 @@ class TEngine {
 
  private:
   void UpdateState();
- 
+
  private:
   TEngineState m_State;
 
  private:
-  TErrList  m_Err;
+  TErrList m_Err;
 
  private:
   TComPortShr m_cp;
@@ -122,10 +97,10 @@ class TEngine {
  private:
   TCmdQueue m_Queue;
   TCmdTransceiverEx m_Transceiver;
- 
+
   TBsMasterConnectObs m_obsMasterConnect;
   TCmdQueueObserver<TBsMasterConnectObs> m_qobsMasterConnect;
-  
+
  private:
   bool m_bDoing;
 
@@ -133,10 +108,10 @@ class TEngine {
   bool m_bAutoDetectMasterEnabled;
   bool m_bAutoDetectSlaveEnabled;
   bool m_bAutoDumpSlaveEnabled;
-  
+
  private:
-  scoped_ptr<TDumpJob> m_scpJob;
- 
+  shared_ptr<TDumpJob> m_shpJob;
+
  private:
   CmdsBGetSysValueE m_cmdsGsveMaster;
   CmdsBGetSysValueE m_cmdsGsveSlave;

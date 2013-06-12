@@ -218,6 +218,8 @@ class TBsMasterConnectObs {
   void ConfirmMasterExt(OSysTime ot, TWord wCN);
   void ConfirmBase(OSysTime ot, TByte bCN);
   void ConfirmExt(OSysTime ot, TWord wCN);
+
+ public:
   void ObscureAll(OSysTime ot);
   
  public:

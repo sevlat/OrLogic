@@ -40,6 +40,8 @@ class TMainDialog
 
   void OnParamsChanged();
 
+  void OnStopClicked();
+
  public:
   void OnTimer(int IdTimer);
 
@@ -47,6 +49,7 @@ class TMainDialog
 
  public:
   void EnableControl(int IdCtrl, bool bEnable);
+  void ShowControl(int IdCtrl, bool bShow);
 
  private:
   void SearchComPorts();

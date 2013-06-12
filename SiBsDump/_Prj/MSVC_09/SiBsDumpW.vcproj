@@ -62,7 +62,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="comctl32.lib"
 				OutputFile="..\..\..\..\bin\MSVC_09_$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
@@ -138,7 +137,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="comctl32.lib"
 				OutputFile="..\..\..\..\bin\MSVC_09_$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -173,19 +171,19 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{748B2FBF-E5AE-4B52-B152-4624D7492E3C}"
-			RelativePathToProject="..\..\..\HFL\_Prj\MSVC_09\HFL.vcproj"
+			RelativePathToProject="..\..\Source\HFL\_Prj\MSVC_09\HFL.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{8A2B0B3D-0FE4-481E-B18F-F80053595858}"
-			RelativePathToProject=".\SiBsDump.vcproj"
+			RelativePathToProject="..\..\Source\SiBsDump\_Prj\MSVC_09\SiBsDump.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{ECE0315C-A0A6-49B5-941C-1E3C21C38102}"
-			RelativePathToProject="..\..\..\SiLib\_Prj\MSVC_09\SiLib.vcproj"
+			RelativePathToProject="..\..\Source\SiLib\_Prj\MSVC_09\SiLib.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{80FC58BB-4A04-4B70-BF01-977EA8C10A73}"
-			RelativePathToProject="..\..\..\SiLibWin\_Prj\MSVC_09\SiLibWin.vcproj"
+			RelativePathToProject="..\..\Source\SiLibWin\_Prj\MSVC_09\SiLibWin.vcproj"
 		/>
 	</References>
 	<Files>
@@ -287,11 +285,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\..\..\small.ico"
+				RelativePath="..\..\Win\small.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Win\small.ico"
+				RelativePath=".\..\..\small.ico"
 				>
 			</File>
 		</Filter>
